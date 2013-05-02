@@ -1,6 +1,6 @@
 ﻿<Window x:Class="Rui.JsonResxEditor.Views.OpenProjectView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" WindowStartupLocation="CenterOwner"
         Height="300" Width="300">
     <Grid Margin="5">
         <Grid.RowDefinitions>

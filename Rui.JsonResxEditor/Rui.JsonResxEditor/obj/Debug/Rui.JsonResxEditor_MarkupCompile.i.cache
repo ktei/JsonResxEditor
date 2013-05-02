@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\dev\vs\JsonResxEditor\Rui.JsonResxEditor\Rui.JsonResxEditor\App.xaml
-51924337972
+7208404591
 1-1682558329
-33-200298761
+46-1389609031
 161364963590
-Views\OpenProjectView.xaml;Views\ProjectView.xaml;Views\ShellView.xaml;Views\SourcesView.xaml;Views\TranslationsView.xaml;
+Views\ItemView.xaml;Views\OpenProjectView.xaml;Views\ProjectView.xaml;Views\ShellView.xaml;Views\SourceListView.xaml;Views\SourceView.xaml;Views\TranslationListView.xaml;
 
 False
 

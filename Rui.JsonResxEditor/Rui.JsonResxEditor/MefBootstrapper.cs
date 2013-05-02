@@ -54,8 +54,14 @@ namespace Rui.JsonResxEditor
 
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
-            base.OnStartup(sender, e);
             CheckDatabase();
+            base.OnStartup(sender, e);
+        }
+
+        protected override void OnExit(object sender, EventArgs e)
+        {
+            IoC.Get<IShell>().PersistPreference();
+            base.OnExit(sender, e);
         }
 
         void CheckDatabase()
@@ -70,6 +76,7 @@ namespace Rui.JsonResxEditor
                 db.CreateTable<Source>();
                 db.CreateTable<Item>();
                 db.CreateTable<Translation>();
+                db.CreateTable<Preference>();
             }
         }
     }

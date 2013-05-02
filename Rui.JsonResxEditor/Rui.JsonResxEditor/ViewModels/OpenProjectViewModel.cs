@@ -8,16 +8,17 @@ using Rui.JsonResxEditor.Shared;
 using Rui.JsonResxEditor.Infrasructure;
 using System.ComponentModel.Composition;
 using Rui.JsonResxEditor.Models;
+using System.Collections.ObjectModel;
 
 namespace Rui.JsonResxEditor.ViewModels
 {
     public class OpenProjectViewModel : Screen
     {
-        private List<Project> _projectList;
+        private ObservableCollection<Project> _projectList;
 
         public OpenProjectViewModel()
         {
-            DisplayName = "Choose a project to open";
+            DisplayName = "Choose a project";
             this.SatisfyImports();
         }
 
@@ -51,9 +52,36 @@ namespace Rui.JsonResxEditor.ViewModels
             OnRequestClose();
         }
 
+        public bool CanOpen
+        {
+            get { return ProjectList.Any(); }
+        }
+
+        public void Delete()
+        {
+            if (GetSelectedProject == null)
+            {
+                return;
+            }
+            var projectId = GetSelectedProject().Id;
+            ProjectService.Delete(projectId);
+            if (MessageBoxSupport.Confirm("Are you sure you want to delete selected project?"))
+            {
+                _projectList.Remove(_projectList.Single(x => x.Id == projectId));
+                NotifyOfPropertyChange(() => CanOpen);
+            }
+        }
+
         void LoadProjectList()
         {
-            _projectList = ProjectService.FindAll().ToList();
+            if (IoC.Get<IShell>().ActiveProject != null)
+            {
+                _projectList = new ObservableCollection<Project>(ProjectService.FindAllExcept(IoC.Get<IShell>().ActiveProject.Id));
+            }
+            else
+            {
+                _projectList = new ObservableCollection<Project>(ProjectService.FindAll());
+            }
         }
 
         void OnRequestClose()

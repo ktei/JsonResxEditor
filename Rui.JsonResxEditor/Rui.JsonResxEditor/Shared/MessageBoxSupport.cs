@@ -13,5 +13,11 @@ namespace Rui.JsonResxEditor.Shared
         {
             MessageBox.Show(error, "Error - JsonResxEditor", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
+        public static bool Confirm(string message)
+        {
+            return MessageBox.Show(message, "Confirmation - JsonResxEditor", MessageBoxButton.YesNo,
+                MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes;
+        }
     }
 }

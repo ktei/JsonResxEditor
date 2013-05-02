@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Rui.JsonResxEditor.Infrasructure
 {
-    public interface IShell
+    public interface ISourceService
     {
-        Project ActiveProject { get; }
-        void PersistPreference();
+        void Save(Source model);
+        IEnumerable<Source> FindAll(int projectId);
+        void Delete(int sourceId);
     }
 }

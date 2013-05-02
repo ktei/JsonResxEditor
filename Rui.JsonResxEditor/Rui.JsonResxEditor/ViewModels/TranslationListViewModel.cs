@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace Rui.JsonResxEditor.ViewModels
 {
     [Export]
-    public class TranslationsViewModel : Screen, IHandle<OpenProjectMessage>
+    public class TranslationListViewModel : Screen, IHandle<OpenProjectMessage>
     {
-        public TranslationsViewModel()
+        public TranslationListViewModel()
         {
             DisplayName = "Translations";
             IoC.Get<IEventAggregator>().Subscribe(this);

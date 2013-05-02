@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Rui.JsonResxEditor.Infrasructure
 {
-    public interface IShell
+    public interface IItemService
     {
-        Project ActiveProject { get; }
-        void PersistPreference();
+        IEnumerable<Item> FindAll(int sourceId);
     }
 }

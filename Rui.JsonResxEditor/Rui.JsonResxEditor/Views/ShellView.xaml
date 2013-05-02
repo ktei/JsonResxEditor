@@ -1,71 +1,41 @@
 ﻿<Window x:Class="Rui.JsonResxEditor.Views.ShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" WindowStartupLocation="CenterScreen"
         xmlns:cal="http://www.caliburnproject.org"
+        xmlns:local="clr-namespace:Rui.JsonResxEditor.Views"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Height="600" Width="800">
-    <DockPanel>
-        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never">
-            <Button x:Name="NewProject">New</Button>
+    <Window.Resources>
+        <local:EmptyToVisConverter x:Key="emptyToVis"/>
+        <local:EmptyToVisConverter x:Key="emptyToVisReverse" Reverse="True"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ToolBar ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never">
+            <Button x:Name="CreateProject">New</Button>
             <Button x:Name="OpenProject">Open</Button>
         </ToolBar>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition MinHeight="200" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition MinHeight="200" />
-            </Grid.RowDefinitions>
-            
-            <TabControl x:Name="Items">
-                <TabControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding DisplayName, Mode=OneWay}" />
-                            <ContentControl x:Name="ActiveItem"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </TabControl.ItemTemplate>
-            </TabControl>
-
-            <GridSplitter 
-            ResizeDirection="Rows"  
-            Grid.Row="1" Width="Auto" 
-            Height="3" 
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch" 
-            Margin="0"/>
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="200"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition MinWidth="200" Width="200"/>
-                </Grid.ColumnDefinitions>
-
-                <GridSplitter 
-                ResizeDirection="Columns"
-                Grid.Column="1" Width="3" 
-                Height="Auto" 
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch" 
-                Margin="0"/>
-                <DockPanel Grid.RowSpan="2" Grid.Column="2">
-                    <Label DockPanel.Dock="Top">Notes for translations:</Label>
-                    <TextBox AcceptsReturn="True" Padding="5" 
-                     HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
-                </DockPanel>
-                <DockPanel>
-                    <Label DockPanel.Dock="Top">Source text:</Label>
-                    <TextBox AcceptsReturn="True" Padding="5"
-                     HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
-                </DockPanel>
-                <DockPanel Grid.Row="1">
-                    <Label DockPanel.Dock="Top">Translation:</Label>
-                    <TextBox AcceptsReturn="True" Padding="5"
-                     HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
-                </DockPanel>
-            </Grid>
+        <Grid Grid.Row="1" Visibility="{Binding ActiveProject, Mode=OneWay, Converter={StaticResource emptyToVisReverse}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock>No project is open.</TextBlock>
+                <TextBlock>
+                    <Hyperlink Command="{Binding CreateProjectCommand, Mode=OneWay}">Create</Hyperlink>
+                    <Run>or</Run>
+                    <Hyperlink Command="{Binding OpenProjectCommand, Mode=OneWay}">Open</Hyperlink>
+                    <Run>one</Run>
+                </TextBlock>
+            </StackPanel>
         </Grid>
-    </DockPanel>
+        <TabControl Grid.Row="1" x:Name="Items" Visibility="{Binding ActiveProject, Mode=OneWay, Converter={StaticResource emptyToVis}}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding DisplayName, Mode=OneWay}" />
+                        <ContentControl x:Name="ActiveItem"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+    </Grid>
 </Window>

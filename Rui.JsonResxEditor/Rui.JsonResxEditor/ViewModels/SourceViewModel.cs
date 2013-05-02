@@ -1,31 +1,36 @@
 ﻿using Caliburn.Micro;
 using Rui.JsonResxEditor.Infrasructure;
+using Rui.JsonResxEditor.Models;
+using Rui.JsonResxEditor.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Rui.JsonResxEditor.Shared;
-using Rui.JsonResxEditor.Models;
 
 namespace Rui.JsonResxEditor.ViewModels
 {
-    public class ProjectViewModel : Screen
+    public class SourceViewModel : Screen
     {
         string _name;
-        string _description;
 
-        public ProjectViewModel()
+        public SourceViewModel()
         {
-            DisplayName = "Project properties";
+            DisplayName = "Source properties";
             this.SatisfyImports();
         }
 
-        [Import]
-        public IProjectService ProjectService { get; set; }
+        public SourceViewModel(Source source)
+        {
+            Id = source.Id;
+            Name = source.Name;
+        }
 
         public event EventHandler RequestClose;
+
+        [Import]
+        public ISourceService SourceService { get; set; }
 
         public int Id { get; set; }
 
@@ -42,19 +47,6 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
-        public string Description
-        {
-            get { return _description; }
-            set
-            {
-                if (_description != value)
-                {
-                    _description = value;
-                    NotifyOfPropertyChange(() => Description);
-                }
-            }
-        }
-
         public void Save()
         {
             if (!Validate())
@@ -63,8 +55,8 @@ namespace Rui.JsonResxEditor.ViewModels
             }
             try
             {
-                var model = CreateProject();
-                ProjectService.Save(model);
+                var model = CreateSource();
+                SourceService.Save(model);
                 Id = model.Id;
                 OnRequestClose();
             }
@@ -74,12 +66,13 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
-        Project CreateProject()
+        Source CreateSource()
         {
-            return new Project()
+            return new Source()
             {
+                Id = this.Id,
                 Name = this.Name,
-                Description = this.Description
+                ProjectId = IoC.Get<IShell>().ActiveProject.Id
             };
         }
 
@@ -87,7 +80,7 @@ namespace Rui.JsonResxEditor.ViewModels
         {
             if (string.IsNullOrWhiteSpace(Name))
             {
-                MessageBoxSupport.ShowError("Please provide a project name.");
+                MessageBoxSupport.ShowError("Please provide a source name.");
                 return false;
             }
             return true;

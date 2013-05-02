@@ -18,9 +18,9 @@ namespace Rui.JsonResxEditor.Views
     /// <summary>
     /// Interaction logic for TranslationsView.xaml
     /// </summary>
-    public partial class TranslationsView : UserControl
+    public partial class TranslationListView : UserControl
     {
-        public TranslationsView()
+        public TranslationListView()
         {
             InitializeComponent();
         }

@@ -13,17 +13,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Rui.JsonResxEditor.Shared;
+using Rui.JsonResxEditor.ViewModels;
+using Rui.JsonResxEditor.Models;
 
 namespace Rui.JsonResxEditor.Views
 {
     /// <summary>
     /// Interaction logic for SourcesView.xaml
     /// </summary>
-    public partial class SourcesView : UserControl
+    public partial class SourceListView : UserControl
     {
-        public SourcesView()
+        public SourceListView()
         {
             InitializeComponent();
+        }
+
+        private void SourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            (this.DataContext as SourceListViewModel).ActiveSource = SourceList.SelectedItem as Source;
         }
     }
 }
