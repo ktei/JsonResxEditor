@@ -61,7 +61,7 @@ namespace Rui.JsonResxEditor.Services.Sqlite
         {
             using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
             {
-                return db.Get<Project>(projectId);
+                return db.Find<Project>(projectId);
             }
         }
 

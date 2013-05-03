@@ -48,5 +48,10 @@ namespace Rui.JsonResxEditor.Views
         {
             this.Close();
         }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            this.BindingGroup.CommitEdit();
+        }
     }
 }

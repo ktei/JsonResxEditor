@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Rui.JsonResxEditor.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:EmptyToVisConverter x:Key="emptyToVis"/>
+        <local:EmptyToVisConverter x:Key="emptyToVisReverse" Reverse="True"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="200" Width="200"/>
@@ -15,8 +20,8 @@
             <Label DockPanel.Dock="Top">Source list:</Label>
             <ToolBar x:Name="SourceListToolBar" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never">
                 <Button x:Name="CreateSource">Add</Button>
-                <Button>Edit</Button>
-                <Button>Delete</Button>
+                <Button x:Name="EditSource">Edit</Button>
+                <Button x:Name="DeleteSource">Delete</Button>
             </ToolBar>
             <ListBox x:Name="SourceList" SelectionChanged="SourceList_SelectionChanged">
                 <ListBox.ItemTemplate>
@@ -33,27 +38,42 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch" 
                 Margin="0"/>
-        <DockPanel Grid.Column="2">
+        <TextBlock Grid.Column="2" Visibility="{Binding ActiveSource, Mode=OneWay, Converter={StaticResource emptyToVisReverse}}"
+                   VerticalAlignment="Center" HorizontalAlignment="Center">No source is selected.</TextBlock>
+        <DockPanel Grid.Column="2" Visibility="{Binding ActiveSource, Mode=OneWay, Converter={StaticResource emptyToVis}}">
             <Label DockPanel.Dock="Top">Strings:</Label>
             <ToolBar x:Name="StringsToolBar" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never">
-                <Button>New</Button>
-                <Button>Edit</Button>
-                <Button>Delete</Button>
+                <Button x:Name="CreateItem">New</Button>
+                <Button x:Name="EditItem">Edit</Button>
+                <Button x:Name="DeleteItem">Delete</Button>
             </ToolBar>
-            <ListView>
+            <ListView x:Name="ItemList" SelectionChanged="ItemList_SelectionChanged">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Token">
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
+                        <GridViewColumn>
+                            <GridViewColumn.Header>
+                                <Label HorizontalAlignment="Left">Token</Label>
+                            </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    
+                                    <TextBlock Text="{Binding Token, Mode=OneWay}" Width="250" TextWrapping="Wrap"
+                                               FontSize="15" Foreground="Black"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Text">
+                        <GridViewColumn>
+                            <GridViewColumn.Header>
+                                <Label HorizontalAlignment="Left">Text</Label>
+                            </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-
+                                    <TextBlock Text="{Binding Text, Mode=OneWay}" TextWrapping="Wrap" Width="500"
+                                               FontSize="15" Foreground="Black"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

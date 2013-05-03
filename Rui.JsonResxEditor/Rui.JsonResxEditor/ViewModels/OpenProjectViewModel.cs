@@ -64,9 +64,9 @@ namespace Rui.JsonResxEditor.ViewModels
                 return;
             }
             var projectId = GetSelectedProject().Id;
-            ProjectService.Delete(projectId);
             if (MessageBoxSupport.Confirm("Are you sure you want to delete selected project?"))
             {
+                ProjectService.Delete(projectId);
                 _projectList.Remove(_projectList.Single(x => x.Id == projectId));
                 NotifyOfPropertyChange(() => CanOpen);
             }
@@ -74,9 +74,9 @@ namespace Rui.JsonResxEditor.ViewModels
 
         void LoadProjectList()
         {
-            if (IoC.Get<IShell>().ActiveProject != null)
+            if (IoC.Get<IShell>().ActiveProjectId != null)
             {
-                _projectList = new ObservableCollection<Project>(ProjectService.FindAllExcept(IoC.Get<IShell>().ActiveProject.Id));
+                _projectList = new ObservableCollection<Project>(ProjectService.FindAllExcept(IoC.Get<IShell>().ActiveProjectId.Value));
             }
             else
             {

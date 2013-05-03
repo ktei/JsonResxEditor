@@ -22,6 +22,14 @@ namespace Rui.JsonResxEditor.ViewModels
             this.SatisfyImports();
         }
 
+        public ProjectViewModel(Project project)
+            : this()
+        {
+            Name = project.Name;
+            Description = project.Description;
+            Id = project.Id;
+        }
+
         [Import]
         public IProjectService ProjectService { get; set; }
 
@@ -63,7 +71,7 @@ namespace Rui.JsonResxEditor.ViewModels
             }
             try
             {
-                var model = CreateProject();
+                var model = CreateModel();
                 ProjectService.Save(model);
                 Id = model.Id;
                 OnRequestClose();
@@ -74,10 +82,11 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
-        Project CreateProject()
+        Project CreateModel()
         {
             return new Project()
             {
+                Id = this.Id,
                 Name = this.Name,
                 Description = this.Description
             };

@@ -16,6 +16,9 @@ namespace Rui.JsonResxEditor.Models
         public int ItemId { get; set; }
 
         [Indexed]
+        public int SourceId { get; set; }
+
+        [Indexed]
         public int ProjectId { get; set; }
 
         public string Text { get; set; }

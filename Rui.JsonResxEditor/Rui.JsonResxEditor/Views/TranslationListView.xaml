@@ -61,17 +61,17 @@
                 Margin="0"/>
             <DockPanel Grid.RowSpan="2" Grid.Column="2">
                 <Label DockPanel.Dock="Top">Notes for translations:</Label>
-                <TextBox AcceptsReturn="True" Padding="5" 
+                <TextBox AcceptsReturn="True" Padding="5" TextWrapping="Wrap"
                      HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
             </DockPanel>
             <DockPanel>
                 <Label DockPanel.Dock="Top">Source text:</Label>
-                <TextBox AcceptsReturn="True" Padding="5"
+                <TextBox AcceptsReturn="True" Padding="5" TextWrapping="Wrap"
                      HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
             </DockPanel>
             <DockPanel Grid.Row="1">
                 <Label DockPanel.Dock="Top">Translation:</Label>
-                <TextBox AcceptsReturn="True" Padding="5"
+                <TextBox AcceptsReturn="True" Padding="5" TextWrapping="Wrap"
                      HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
             </DockPanel>
         </Grid>

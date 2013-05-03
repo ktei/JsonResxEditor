@@ -15,8 +15,5 @@ namespace Rui.JsonResxEditor.Models
         public string Name { get; set; }
 
         public string Value { get; set; }
-
-        [Indexed]
-        public string WindowsUser { get; set; }
     }
 }

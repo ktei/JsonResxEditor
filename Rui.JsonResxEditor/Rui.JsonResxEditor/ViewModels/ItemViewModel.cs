@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Rui.JsonResxEditor.Shared;
 using Rui.JsonResxEditor.Models;
 using Rui.JsonResxEditor.Infrasructure;
+using System.ComponentModel.Composition;
 
 namespace Rui.JsonResxEditor.ViewModels
 {
@@ -15,13 +16,29 @@ namespace Rui.JsonResxEditor.ViewModels
         string _token;
         string _text;
 
-        public ItemViewModel()
+        public ItemViewModel(int sourceId)
         {
             DisplayName = "Item properties";
             this.SatisfyImports();
+            SourceId = sourceId;
         }
 
+        public ItemViewModel(Item item)
+            : this(item.SourceId)
+        {
+            Id = item.Id;
+            Token = item.Token;
+            Text = item.Text;
+        }
+
+        [Import]
+        public IItemService ItemService { get; set; }
+
         public event EventHandler RequestClose;
+
+        public int Id { get; set; }
+
+        public int SourceId { get; set; }
 
         public string Token
         {
@@ -49,13 +66,34 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
-        Item CreateItem()
+        public void Save()
+        {
+            if (!Validate())
+            {
+                return;
+            }
+            try
+            {
+                var model = CreateModel();
+                ItemService.Save(model);
+                Id = model.Id;
+                OnRequestClose();
+            }
+            catch (Exception ex)
+            {
+                MessageBoxSupport.ShowError(ex.Message);
+            }
+        }
+
+        Item CreateModel()
         {
             return new Item()
             {
+                Id = this.Id,
                 Token = this.Token,
                 Text = this.Text,
-                ProjectId = IoC.Get<IShell>().ActiveProject.Id
+                SourceId = this.SourceId,
+                ProjectId = IoC.Get<IShell>().ActiveProjectId.Value
             };
         }
 

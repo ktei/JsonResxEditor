@@ -1,6 +1,9 @@
 ﻿<Window x:Class="Rui.JsonResxEditor.Views.SourceView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" WindowStartupLocation="CenterOwner"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" SizeToContent="Height" Width="350">
+    <Window.BindingGroup>
+        <BindingGroup/>
+    </Window.BindingGroup>
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -8,10 +11,10 @@
         </Grid.RowDefinitions>
         <StackPanel>
             <TextBlock Margin="0,5">Name:</TextBlock>
-            <TextBox x:Name="NameTextBox" Text="{Binding Name, Mode=TwoWay}" />
+            <TextBox x:Name="NameTextBox" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=Explicit}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,0" HorizontalAlignment="Right">
-            <Button Margin="0,0,5,0" x:Name="Save" Width="60">Save</Button>
+            <Button Click="Save_Click" Margin="0,0,5,0" x:Name="Save" Width="60">Save</Button>
             <Button Click="Cancel_Click" Width="60">Cancel</Button>
         </StackPanel>
     </Grid>

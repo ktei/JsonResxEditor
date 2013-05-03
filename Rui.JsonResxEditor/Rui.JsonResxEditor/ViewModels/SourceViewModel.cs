@@ -22,6 +22,7 @@ namespace Rui.JsonResxEditor.ViewModels
         }
 
         public SourceViewModel(Source source)
+            : this()
         {
             Id = source.Id;
             Name = source.Name;
@@ -55,7 +56,7 @@ namespace Rui.JsonResxEditor.ViewModels
             }
             try
             {
-                var model = CreateSource();
+                var model = CreateModel();
                 SourceService.Save(model);
                 Id = model.Id;
                 OnRequestClose();
@@ -66,13 +67,13 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
-        Source CreateSource()
+        Source CreateModel()
         {
             return new Source()
             {
                 Id = this.Id,
                 Name = this.Name,
-                ProjectId = IoC.Get<IShell>().ActiveProject.Id
+                ProjectId = IoC.Get<IShell>().ActiveProjectId.Value
             };
         }
 

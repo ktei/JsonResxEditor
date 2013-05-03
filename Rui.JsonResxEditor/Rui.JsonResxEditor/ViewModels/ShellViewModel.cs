@@ -3,11 +3,8 @@ using Rui.JsonResxEditor.Infrasructure;
 using Rui.JsonResxEditor.Models;
 using Rui.JsonResxEditor.Shared;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Rui.JsonResxEditor.ViewModels
@@ -15,7 +12,7 @@ namespace Rui.JsonResxEditor.ViewModels
     [Export(typeof(IShell))]
     public class ShellViewModel : Conductor<IScreen>.Collection.OneActive, IShell
     {
-        private Project _activeProject;
+        private ProjectViewModel _activeProject;
 
         public ShellViewModel()
         {
@@ -50,7 +47,7 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
-        public Project ActiveProject
+        public ProjectViewModel ActiveProject
         {
             get { return _activeProject; }
             private set
@@ -58,8 +55,27 @@ namespace Rui.JsonResxEditor.ViewModels
                 if (_activeProject != value)
                 {
                     _activeProject = value;
+                    _activeProject.PropertyChanged += (sender, e) =>
+                        {
+                            if (e.PropertyName == "Name")
+                            {
+                                DisplayName = string.Format("{0} - Json Resource Editor", _activeProject.Name);
+                            }
+                        };
                     NotifyOfPropertyChange(() => ActiveProject);
                 }
+            }
+        }
+
+        public int? ActiveProjectId
+        {
+            get
+            {
+                if (ActiveProject == null)
+                {
+                    return null;
+                }
+                return ActiveProject.Id;
             }
         }
 
@@ -97,20 +113,28 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
+        public void EditProject()
+        {
+            if (ActiveProject != null)
+            {
+                IoC.Get<IWindowManager>().ShowDialog(ActiveProject);
+                
+            }
+        }
+
         public void PersistPreference()
         {
             var projectPref = new Preference()
             {
                 Name = Preference.DEFAULT_PROJECT_ID,
                 Value = ActiveProject == null ? string.Empty : ActiveProject.Id.ToString(),
-                WindowsUser = Environment.UserName
             };
             PreferenceService.Save(projectPref);
         }
 
         void LoadDefaultProject()
         {
-            var prefs = PreferenceService.FindAll(Environment.UserName);
+            var prefs = PreferenceService.FindAll();
             var p = prefs.FirstOrDefault(x => x.Name == Preference.DEFAULT_PROJECT_ID);
             if (p == null)
             {
@@ -133,7 +157,7 @@ namespace Rui.JsonResxEditor.ViewModels
             {
                 throw new ArgumentNullException("project");
             }
-            ActiveProject = project;
+            ActiveProject = new ProjectViewModel(project);
             IoC.Get<IEventAggregator>().Publish(new OpenProjectMessage(project.Id));
             DisplayName = string.Format("{0} - Json Resource Editor", project.Name);
         }

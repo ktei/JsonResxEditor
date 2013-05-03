@@ -10,6 +10,6 @@ namespace Rui.JsonResxEditor.Infrasructure
     public interface IPreferenceService
     {
         void Save(Preference model);
-        IEnumerable<Preference> FindAll(string windowsUser);
+        IEnumerable<Preference> FindAll();
     }
 }

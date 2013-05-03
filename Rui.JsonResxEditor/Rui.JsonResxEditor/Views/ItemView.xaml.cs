@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rui.JsonResxEditor.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,11 +23,34 @@ namespace Rui.JsonResxEditor.Views
         public ItemView()
         {
             InitializeComponent();
+            this.Loaded += ItemView_Loaded;
+            this.Unloaded += ItemView_Unloaded;
+        }
+
+        void ItemView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            (this.DataContext as ItemViewModel).RequestClose -= ItemView_RequestClose;
+        }
+
+        void ItemView_Loaded(object sender, RoutedEventArgs e)
+        {
+            TokenTextBox.Focus();
+            (this.DataContext as ItemViewModel).RequestClose += ItemView_RequestClose;
+        }
+
+        void ItemView_RequestClose(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            this.BindingGroup.CommitEdit();
         }
     }
 }

@@ -13,11 +13,48 @@ namespace Rui.JsonResxEditor.Services.Sqlite
     [Export(typeof(IItemService))]
     public class ItemService : IItemService
     {
+        public void Save(Item model)
+        {
+            if (model.Id == 0)
+            {
+                Insert(model);
+            }
+            else
+            {
+                Update(model);
+            }
+        }
+
         public IEnumerable<Item> FindAll(int sourceId)
         {
             using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
             {
-                return db.Query<Item>("select * from Item where SourceId <> ?", sourceId);
+                return db.Query<Item>("select * from Item where SourceId = ?", sourceId);
+            }
+        }
+
+        private void Insert(Item model)
+        {
+            using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
+            {
+                db.Insert(model);
+            }
+        }
+
+        private void Update(Item model)
+        {
+            using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
+            {
+                db.Update(model);
+            }
+        }
+
+
+        public void Delete(int itemId)
+        {
+            using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
+            {
+                db.Execute("delete from Item where Id = ?", itemId);
             }
         }
     }

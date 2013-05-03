@@ -30,7 +30,12 @@ namespace Rui.JsonResxEditor.Views
 
         private void SourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            (this.DataContext as SourceListViewModel).ActiveSource = SourceList.SelectedItem as Source;
+            (this.DataContext as SourceListViewModel).ActiveSource = SourceList.SelectedItem as SourceViewModel;
+        }
+
+        private void ItemList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            (this.DataContext as SourceListViewModel).ActiveItem = ItemList.SelectedItem as ItemViewModel;
         }
     }
 }

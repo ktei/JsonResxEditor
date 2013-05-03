@@ -1,22 +1,19 @@
 ﻿using Caliburn.Micro;
 using Rui.JsonResxEditor.Infrasructure;
-using Rui.JsonResxEditor.Models;
-using System;
+using Rui.JsonResxEditor.Shared;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rui.JsonResxEditor.ViewModels
 {
     [Export]
     public class SourceListViewModel : Screen, IHandle<OpenProjectMessage>
     {
-        private ObservableCollection<Source> _sourceList;
-        private ObservableCollection<Item> _itemList;
-        private Source _activeSource;
+        private ObservableCollection<SourceViewModel> _sourceList;
+        private ObservableCollection<ItemViewModel> _itemList;
+        private SourceViewModel _activeSource;
 
         public SourceListViewModel()
         {
@@ -30,7 +27,7 @@ namespace Rui.JsonResxEditor.ViewModels
         [Import]
         public IItemService ItemService { get; set; }
 
-        public Source ActiveSource
+        public SourceViewModel ActiveSource
         {
             get { return _activeSource; }
             set
@@ -38,11 +35,12 @@ namespace Rui.JsonResxEditor.ViewModels
                 if (_activeSource != value)
                 {
                     ActivateSource(value);
+                    NotifyOfPropertyChange(() => ActiveSource);
                 }
             }
         }
 
-        public IEnumerable<Source> SourceList
+        public IEnumerable<SourceViewModel> SourceList
         {
             get
             {
@@ -54,7 +52,7 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
-        public IEnumerable<Item> ItemList
+        public IEnumerable<ItemViewModel> ItemList
         {
             get
             {
@@ -66,13 +64,69 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
+        public ItemViewModel ActiveItem { get; set; }
+
         public void CreateSource()
         {
             var model = new SourceViewModel();
             IoC.Get<IWindowManager>().ShowDialog(model);
             if (model.Id > 0)
             {
-                _sourceList.Add(new Source() { Id = model.Id, Name = model.Name, ProjectId = IoC.Get<IShell>().ActiveProject.Id });
+                _sourceList.Add(model);
+            }
+        }
+
+        public void EditSource()
+        {
+            if (ActiveSource != null)
+            {
+                IoC.Get<IWindowManager>().ShowDialog(ActiveSource);
+            }
+        }
+
+        public void DeleteSource()
+        {
+            if (ActiveSource != null)
+            {
+                if (MessageBoxSupport.Confirm("Are you sure you want to delete selected source?"))
+                {
+                    SourceService.Delete(ActiveSource.Id);
+                    _sourceList.Remove(ActiveSource);
+                    ActivateSource(null);
+                }
+            }
+        }
+
+        public void CreateItem()
+        {
+            if (ActiveSource != null)
+            {
+                var model = new ItemViewModel(ActiveSource.Id);
+                IoC.Get<IWindowManager>().ShowDialog(model);
+                if (model.Id > 0)
+                {
+                    _itemList.Add(model);
+                }
+            }
+        }
+
+        public void EditItem()
+        {
+            if (ActiveItem != null)
+            {
+                IoC.Get<IWindowManager>().ShowDialog(ActiveItem);
+            }
+        }
+
+        public void DeleteItem()
+        {
+            if (ActiveItem != null)
+            {
+                if (MessageBoxSupport.Confirm("Are you sure you want to delete selected item?"))
+                {
+                    ItemService.Delete(ActiveItem.Id);
+                    _itemList.Remove(ActiveItem);
+                }
             }
         }
 
@@ -84,10 +138,15 @@ namespace Rui.JsonResxEditor.ViewModels
 
         void LoadSourceList()
         {
-            _sourceList = new ObservableCollection<Source>(SourceService.FindAll(IoC.Get<IShell>().ActiveProject.Id));
+            var activeProjectId = IoC.Get<IShell>().ActiveProjectId;
+            if (activeProjectId != null)
+            {
+                _sourceList = new ObservableCollection<SourceViewModel>(
+                    SourceService.FindAll(activeProjectId.Value).Select(x => new SourceViewModel(x)));
+            }
         }
 
-        void ActivateSource(Source source)
+        void ActivateSource(SourceViewModel source)
         {
             _activeSource = source;
             LoadItemList();
@@ -102,7 +161,7 @@ namespace Rui.JsonResxEditor.ViewModels
             }
             else
             {
-                _itemList = new ObservableCollection<Item>(ItemService.FindAll(ActiveSource.Id));
+                _itemList = new ObservableCollection<ItemViewModel>(ItemService.FindAll(ActiveSource.Id).Select(x => new ItemViewModel(x)));
             }
         }
     }

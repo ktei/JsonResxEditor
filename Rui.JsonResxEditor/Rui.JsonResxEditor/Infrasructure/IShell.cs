@@ -9,7 +9,7 @@ namespace Rui.JsonResxEditor.Infrasructure
 {
     public interface IShell
     {
-        Project ActiveProject { get; }
+        int? ActiveProjectId { get; }
         void PersistPreference();
     }
 }
