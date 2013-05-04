@@ -12,6 +12,7 @@ namespace Rui.JsonResxEditor.Infrasructure
         void Save(Project model);
         IEnumerable<Project> FindAll();
         IEnumerable<Project> FindAllExcept(int projectId);
+        bool HasProject();
         void Delete(int projectId);
         Project Get(int projectId);
     }

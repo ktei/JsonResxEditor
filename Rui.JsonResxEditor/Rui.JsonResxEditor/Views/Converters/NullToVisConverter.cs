@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace Rui.JsonResxEditor.Views
 {
-    public class EmptyToVisConverter : IValueConverter
+    public class NullToVisConverter : IValueConverter
     {
         public bool Reverse { get; set; }
 
@@ -19,15 +19,6 @@ namespace Rui.JsonResxEditor.Views
             if (value == null)
             {
                 return Reverse ? Visibility.Visible : Visibility.Collapsed;
-            }
-            PropertyInfo propertyInfo = value.GetType().GetProperty("Count");
-            if (propertyInfo != null)
-            {
-                int count = (int)propertyInfo.GetValue(value, null);
-                if (count > 0)
-                {
-                    return Reverse ? Visibility.Collapsed : Visibility.Visible;
-                }
             }
             return Reverse ? Visibility.Collapsed : Visibility.Visible;
         }

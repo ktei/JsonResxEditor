@@ -80,5 +80,14 @@ namespace Rui.JsonResxEditor.Services.Sqlite
                 db.Update(model);
             }
         }
+
+
+        public bool HasProject()
+        {
+            using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
+            {
+                return db.ExecuteScalar<int>("select count(Id) from Project") > 0;
+            }
+        }
     }
 }

@@ -3,55 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:local="clr-namespace:Rui.JsonResxEditor.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition MinHeight="200" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition MinHeight="200" />
-        </Grid.RowDefinitions>
-
-        <ListView>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Source text">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Translation">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-
-        <GridSplitter 
-            ResizeDirection="Rows"  
-            Grid.Row="1" Width="Auto" 
-            Height="3" 
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch" 
-            Margin="0"/>
-        <Grid Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <local:NullToBoolConverter x:Key="nullToBool"/>
+    </UserControl.Resources>
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+            <Label>Locale:</Label>
+            <ComboBox HorizontalAlignment="Left" Width="200" ItemsSource="{Binding LocaleList, Mode=OneWay}"
+                      SelectedValuePath="Code" DisplayMemberPath="Name" SelectedValue="{Binding SelectedLocale, Mode=TwoWay}"></ComboBox>
+        </ToolBar>
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="200"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition MinWidth="200" Width="200"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition MinWidth="200"/>
             </Grid.ColumnDefinitions>
-
-
+            <DockPanel>
+                <ToolBar x:Name="SourceListToolBar" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never">
+                    <Button x:Name="CreateSource">Add</Button>
+                    <Button x:Name="EditSource">Edit</Button>
+                    <Button x:Name="DeleteSource">Delete</Button>
+                </ToolBar>
+                <ListBox x:Name="SourceList" SelectedItem="{Binding ActiveSource, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name, Mode=OneWay}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
             <GridSplitter 
                 ResizeDirection="Columns"
                 Grid.Column="1" Width="3" 
@@ -59,22 +44,116 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch" 
                 Margin="0"/>
-            <DockPanel Grid.RowSpan="2" Grid.Column="2">
-                <Label DockPanel.Dock="Top">Notes for translations:</Label>
-                <TextBox AcceptsReturn="True" Padding="5" TextWrapping="Wrap"
-                     HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
-            </DockPanel>
-            <DockPanel>
-                <Label DockPanel.Dock="Top">Source text:</Label>
-                <TextBox AcceptsReturn="True" Padding="5" TextWrapping="Wrap"
-                     HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
-            </DockPanel>
-            <DockPanel Grid.Row="1">
-                <Label DockPanel.Dock="Top">Translation:</Label>
-                <TextBox AcceptsReturn="True" Padding="5" TextWrapping="Wrap"
-                     HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
-            </DockPanel>
-        </Grid>
-    </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition MinHeight="200" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition MinHeight="200" />
+                </Grid.RowDefinitions>
 
+                <DockPanel>
+                    <ToolBar x:Name="StringsToolBar" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never">
+                        <Button x:Name="CreateItem">New</Button>
+                        <Button Content="Delete">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <cal:ActionMessage MethodName="DeleteItems">
+                                        <cal:Parameter Value="{Binding ElementName=TranslationList, Path=SelectedItems}" />
+                                    </cal:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </ToolBar>
+                    <ListView x:Name="TranslationList" SelectionMode="Extended" 
+                              SelectedItem="{Binding SelectedTranslation, Mode=TwoWay}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Token">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Token, Mode=OneWay}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Source text">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding ItemText, Mode=OneWay}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Translation">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Text, Mode=OneWay}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </DockPanel>
+
+                <GridSplitter 
+            ResizeDirection="Rows"  
+            Grid.Row="1" Width="Auto" 
+            Height="3" 
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch" 
+            Margin="0"/>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="200"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition MinWidth="200" Width="200"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <GridSplitter 
+                ResizeDirection="Columns"
+                Grid.Column="1" Width="3" 
+                Height="Auto" 
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch" 
+                Margin="0"/>
+                    <DockPanel Grid.RowSpan="2" Grid.Column="2">
+                        <Label DockPanel.Dock="Top">Notes for translations:</Label>
+                        <TextBox AcceptsReturn="True" Padding="5" TextWrapping="Wrap"
+                     HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
+                    </DockPanel>
+                    <DockPanel>
+                        <Label DockPanel.Dock="Top">Source text:</Label>
+                        <TextBox x:Name="SourceTextBox" AcceptsReturn="True" Padding="5" 
+                                 IsEnabled="{Binding SelectedTranslation, Mode=OneWay, Converter={StaticResource nullToBool}}"
+                                 TextWrapping="Wrap" LostFocus="SourceTextBox_LostFocus"
+                                 Text="{Binding SelectedTranslation.ItemText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <cal:ActionMessage MethodName="SaveTranslation"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </DockPanel>
+                    <DockPanel Grid.Row="1">
+                        <Label DockPanel.Dock="Top">Translation:</Label>
+                        <TextBox x:Name="TranslationTextBox" AcceptsReturn="True" Padding="5" TextWrapping="Wrap"
+                                 IsEnabled="{Binding SelectedTranslation, Mode=OneWay, Converter={StaticResource nullToBool}}"
+                                 Text="{Binding SelectedTranslation.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <cal:ActionMessage MethodName="SaveTranslation"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </DockPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+    </DockPanel>
 </UserControl>

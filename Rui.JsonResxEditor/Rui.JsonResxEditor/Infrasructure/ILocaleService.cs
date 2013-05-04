@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace Rui.JsonResxEditor.Infrasructure
 {
-    public interface IItemService
+    public interface ILocaleService
     {
-        void Save(Item model);
-        void UpdateText(string newText, int id);
-        IEnumerable<Item> FindAll(int sourceId);
-        void Delete(IEnumerable<int> itemIds);
+        void Insert(Locale model);
+        IEnumerable<Locale> FindAll(int projectId);
+        bool Exists(string code, int projectId);
     }
 }

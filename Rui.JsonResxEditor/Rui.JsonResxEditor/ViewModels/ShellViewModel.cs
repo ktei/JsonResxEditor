@@ -23,9 +23,6 @@ namespace Rui.JsonResxEditor.ViewModels
         public TranslationListViewModel Translations { get; set; }
 
         [Import]
-        public SourceListViewModel Sources { get; set; }
-
-        [Import]
         public IProjectService ProjectService { get; set; }
 
         [Import]
@@ -44,6 +41,14 @@ namespace Rui.JsonResxEditor.ViewModels
             get
             {
                 return new RelayCommand(x => CreateProject());
+            }
+        }
+
+        public string ActiveLocale
+        {
+            get
+            {
+                return Translations.SelectedLocale;
             }
         }
 
@@ -79,19 +84,6 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-            LoadDefaultProject();
-        }
-
-        protected override void OnViewLoaded(object view)
-        {
-            Items.Add(Sources);
-            Items.Add(Translations);
-            ActivateItem(Sources);
-        }
-
         public void CreateProject()
         {
             var model = new ProjectViewModel();
@@ -118,7 +110,6 @@ namespace Rui.JsonResxEditor.ViewModels
             if (ActiveProject != null)
             {
                 IoC.Get<IWindowManager>().ShowDialog(ActiveProject);
-                
             }
         }
 
@@ -130,6 +121,28 @@ namespace Rui.JsonResxEditor.ViewModels
                 Value = ActiveProject == null ? string.Empty : ActiveProject.Id.ToString(),
             };
             PreferenceService.Save(projectPref);
+        }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            LoadDefaultProject();
+        }
+
+        protected override void OnViewLoaded(object view)
+        {
+            if (!ActiveProjectId.HasValue)
+            {
+                if (ProjectService.HasProject())
+                {
+                    OpenProject();
+                }
+                else
+                {
+                    CreateProject();
+                }
+            }
+            ActivateItem(Translations);
         }
 
         void LoadDefaultProject()

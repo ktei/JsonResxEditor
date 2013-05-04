@@ -11,5 +11,6 @@ namespace Rui.JsonResxEditor.Infrasructure
     {
         int? ActiveProjectId { get; }
         void PersistPreference();
+        string ActiveLocale { get; }
     }
 }

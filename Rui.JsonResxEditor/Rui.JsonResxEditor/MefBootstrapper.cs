@@ -77,6 +77,7 @@ namespace Rui.JsonResxEditor
                 db.CreateTable<Item>();
                 db.CreateTable<Translation>();
                 db.CreateTable<Preference>();
+                db.CreateTable<Locale>();
             }
         }
     }

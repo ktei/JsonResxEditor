@@ -64,18 +64,24 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Infrasructure\IItemService.cs" />
+    <Compile Include="Infrasructure\ILocaleService.cs" />
     <Compile Include="Infrasructure\IPreferenceService.cs" />
     <Compile Include="Infrasructure\IProjectService.cs" />
     <Compile Include="Infrasructure\ISourceService.cs" />
+    <Compile Include="Infrasructure\ITranslationService.cs" />
     <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\Locale.cs" />
     <Compile Include="Models\Preference.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\Source.cs" />
     <Compile Include="Models\Translation.cs" />
+    <Compile Include="Models\TranslationItem.cs" />
     <Compile Include="Services\Sqlite\ItemService.cs" />
+    <Compile Include="Services\Sqlite\LocaleService.cs" />
     <Compile Include="Services\Sqlite\PreferenceService.cs" />
     <Compile Include="Services\Sqlite\ProjectService.cs" />
     <Compile Include="Services\Sqlite\SourceService.cs" />
+    <Compile Include="Services\Sqlite\TranslationService.cs" />
     <Compile Include="Shared\DispatcherHelper.cs" />
     <Compile Include="Shared\MefSupport.cs" />
     <Compile Include="Shared\MessageBoxSupport.cs" />
@@ -83,21 +89,24 @@
     <Compile Include="Shared\Settings.cs" />
     <Compile Include="SqliteAPI\SQLite.cs" />
     <Compile Include="SqliteAPI\SQLiteAsync.cs" />
+    <Compile Include="ViewModels\AddLocaleViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
+    <Compile Include="ViewModels\LocaleViewModel.cs" />
     <Compile Include="ViewModels\OpenProjectMessage.cs" />
     <Compile Include="ViewModels\OpenProjectViewModel.cs" />
-    <Compile Include="ViewModels\SourceListViewModel.cs" />
     <Compile Include="ViewModels\SourceViewModel.cs" />
     <Compile Include="ViewModels\TranslationListViewModel.cs" />
-    <Compile Include="Views\Converters\EmptyToVisConverter.cs" />
+    <Compile Include="ViewModels\TranslationViewModel.cs" />
+    <Compile Include="Views\AddLocaleView.xaml.cs">
+      <DependentUpon>AddLocaleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Converters\NullToVisConverter.cs" />
+    <Compile Include="Views\Converters\NullToBoolConverter.cs" />
     <Compile Include="Views\ItemView.xaml.cs">
       <DependentUpon>ItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\OpenProjectView.xaml.cs">
       <DependentUpon>OpenProjectView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SourceListView.xaml.cs">
-      <DependentUpon>SourceListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SourceView.xaml.cs">
       <DependentUpon>SourceView.xaml</DependentUpon>
@@ -105,6 +114,10 @@
     <Compile Include="Views\TranslationListView.xaml.cs">
       <DependentUpon>TranslationListView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\AddLocaleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -135,10 +148,6 @@
       <DependentUpon>ShellView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\SourceListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\SourceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

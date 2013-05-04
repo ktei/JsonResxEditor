@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rui.JsonResxEditor.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,16 @@ namespace Rui.JsonResxEditor.Views
         public TranslationListView()
         {
             InitializeComponent();
+        }
+
+        private void TranslationTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+             
+        }
+
+        private void SourceTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -21,6 +21,9 @@ namespace Rui.JsonResxEditor.Models
         [Indexed]
         public int ProjectId { get; set; }
 
+        [Indexed]
+        public string Locale { get; set; }
+
         public string Text { get; set; }
     }
 }

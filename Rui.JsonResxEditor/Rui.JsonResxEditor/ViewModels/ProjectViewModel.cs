@@ -18,13 +18,14 @@ namespace Rui.JsonResxEditor.ViewModels
 
         public ProjectViewModel()
         {
-            DisplayName = "Project properties";
+            DisplayName = "Create a project";
             this.SatisfyImports();
         }
 
         public ProjectViewModel(Project project)
             : this()
         {
+            DisplayName = "Project properties";
             Name = project.Name;
             Description = project.Description;
             Id = project.Id;
@@ -32,6 +33,9 @@ namespace Rui.JsonResxEditor.ViewModels
 
         [Import]
         public IProjectService ProjectService { get; set; }
+
+        [Import]
+        public ILocaleService LocaleService { get; set; }
 
         public event EventHandler RequestClose;
 
@@ -71,9 +75,11 @@ namespace Rui.JsonResxEditor.ViewModels
             }
             try
             {
-                var model = CreateModel();
-                ProjectService.Save(model);
-                Id = model.Id;
+                var project = CreateProject();
+                ProjectService.Save(project);
+                Id = project.Id;
+                var locale = CreateLocale(project.Id);
+                LocaleService.Insert(locale);
                 OnRequestClose();
             }
             catch (Exception ex)
@@ -82,13 +88,23 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
-        Project CreateModel()
+        Project CreateProject()
         {
             return new Project()
             {
                 Id = this.Id,
                 Name = this.Name,
                 Description = this.Description
+            };
+        }
+
+        Locale CreateLocale(int projectId)
+        {
+            return new Locale()
+            {
+                Code = "en",
+                DisplayName = "English",
+                ProjectId = projectId
             };
         }
 

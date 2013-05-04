@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Rui.JsonResxEditor.Services.Sqlite
 {
-    [Export(typeof(IItemService))]
-    public class ItemService : IItemService
+    [Export(typeof(ITranslationService))]
+    public class TranslationService : ITranslationService
     {
-        public void Save(Item model)
+        public void Save(Translation model)
         {
             if (model.Id == 0)
             {
@@ -25,15 +25,25 @@ namespace Rui.JsonResxEditor.Services.Sqlite
             }
         }
 
-        public IEnumerable<Item> FindAll(int sourceId)
+        public IEnumerable<TranslationItem> FindAll(int sourceId, string locale)
         {
             using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
             {
-                return db.Query<Item>("select * from Item where SourceId = ?", sourceId);
+                return db.Query<TranslationItem>(@"select i.Token, i.Id as ItemId, i.Text as ItemText, i.SourceId, t.Id, t.Text
+                    from Item i left outer join Translation t on (i.Id = t.ItemId and t.Locale = ?)
+                    where i.SourceId = ?", locale, sourceId);
             }
         }
 
-        private void Insert(Item model)
+        public void Delete(int translationId)
+        {
+            using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
+            {
+                db.Execute("delete from Translation where Id = ?", translationId);
+            }
+        }
+
+        private void Insert(Translation model)
         {
             using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
             {
@@ -41,31 +51,11 @@ namespace Rui.JsonResxEditor.Services.Sqlite
             }
         }
 
-        private void Update(Item model)
+        private void Update(Translation model)
         {
             using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
             {
                 db.Update(model);
-            }
-        }
-
-        public void UpdateText(string newText, int id)
-        {
-            using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
-            {
-                db.Execute("update Item set Text = ? where Id = ?", newText, id);
-            }
-        }
-
-        public void Delete(IEnumerable<int> itemIds)
-        {
-            using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
-            {
-                foreach (var id in itemIds)
-                {
-                    db.Execute("delete from Item where Id = ?", id);
-                    db.Execute("delete from Translation where ItemId = ?", id);
-                }
             }
         }
     }
