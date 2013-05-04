@@ -25,6 +25,19 @@ namespace Rui.JsonResxEditor.Views
             InitializeComponent();
             this.Loaded += AddLocaleView_Loaded;
             this.Unloaded += AddLocaleView_Unloaded;
+            this.KeyDown += AddLocaleView_KeyDown;
+        }
+
+        void AddLocaleView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                this.Save.AutomationPeerInvoke();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
 
         void AddLocaleView_Unloaded(object sender, RoutedEventArgs e)
@@ -34,7 +47,7 @@ namespace Rui.JsonResxEditor.Views
 
         void AddLocaleView_Loaded(object sender, RoutedEventArgs e)
         {
-            NameTextBox.Focus();
+            NameTextBox.FocusAndSelectAll();
             (this.DataContext as AddLocaleViewModel).RequestClose += AddLocaleView_RequestClose;
         }
 

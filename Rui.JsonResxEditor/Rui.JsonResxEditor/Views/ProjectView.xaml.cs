@@ -25,11 +25,24 @@ namespace Rui.JsonResxEditor.Views
             InitializeComponent();
             this.Loaded += ProjectView_Loaded;
             this.Unloaded += ProjectView_Unloaded;
+            this.KeyDown += ProjectView_KeyDown;
+        }
+
+        void ProjectView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                this.Save.AutomationPeerInvoke();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
 
         void ProjectView_Loaded(object sender, RoutedEventArgs e)
         {
-            NameTextBox.Focus();
+            NameTextBox.FocusAndSelectAll();
             (this.DataContext as ProjectViewModel).RequestClose += ProjectView_RequestClose;
         }
 

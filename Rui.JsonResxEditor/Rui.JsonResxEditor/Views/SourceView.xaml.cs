@@ -25,11 +25,24 @@ namespace Rui.JsonResxEditor.Views
             InitializeComponent();
             this.Loaded += SourceView_Loaded;
             this.Unloaded += SourceView_Unloaded;
+            this.KeyDown += SourceView_KeyDown;
+        }
+
+        void SourceView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                this.Save.AutomationPeerInvoke();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
 
         void SourceView_Loaded(object sender, RoutedEventArgs e)
         {
-            NameTextBox.Focus();
+            NameTextBox.FocusAndSelectAll();
             (this.DataContext as SourceViewModel).RequestClose += SourceView_RequestClose;
         }
 

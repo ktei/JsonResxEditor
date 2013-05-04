@@ -224,12 +224,12 @@ namespace Rui.JsonResxEditor.ViewModels
             {
                 _localeList = new ObservableCollection<LocaleViewModel>(
                     LocaleService.FindAll(activeProjectId.Value).Select(x => new LocaleViewModel(x)));
+                _localeList.Add(AddLocaleOption);
+                NotifyOfPropertyChange(() => LocaleList);
                 if (_localeList.Count > 0)
                 {
                     SelectedLocale = _localeList[0].Code;
                 }
-                _localeList.Add(AddLocaleOption);
-                NotifyOfPropertyChange(() => LocaleList);
             }
         }
 

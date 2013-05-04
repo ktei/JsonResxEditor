@@ -54,6 +54,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -102,6 +103,7 @@
     </Compile>
     <Compile Include="Views\Converters\NullToVisConverter.cs" />
     <Compile Include="Views\Converters\NullToBoolConverter.cs" />
+    <Compile Include="Views\Helpers\ControlExtensions.cs" />
     <Compile Include="Views\ItemView.xaml.cs">
       <DependentUpon>ItemView.xaml</DependentUpon>
     </Compile>
