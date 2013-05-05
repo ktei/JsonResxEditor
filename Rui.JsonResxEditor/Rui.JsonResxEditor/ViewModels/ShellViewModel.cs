@@ -1,9 +1,11 @@
 ﻿using Caliburn.Micro;
+using Newtonsoft.Json;
 using Rui.JsonResxEditor.Infrasructure;
 using Rui.JsonResxEditor.Models;
 using Rui.JsonResxEditor.Shared;
 using System;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 
@@ -81,6 +83,19 @@ namespace Rui.JsonResxEditor.ViewModels
                     return null;
                 }
                 return ActiveProject.Id;
+            }
+        }
+
+        public void Generate()
+        {
+            try
+            {
+                ProjectService.WriteToFile(ActiveProject.Workspace, ActiveProject.Id);
+                System.Diagnostics.Process.Start(ActiveProject.Workspace);
+            }
+            catch (Exception ex)
+            {
+                MessageBoxSupport.ShowError("Failed to generate localization files: " + ex.Message);
             }
         }
 

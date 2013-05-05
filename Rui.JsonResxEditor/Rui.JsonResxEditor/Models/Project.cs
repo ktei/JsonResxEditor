@@ -15,5 +15,7 @@ namespace Rui.JsonResxEditor.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public string Workspace { get; set; }
     }
 }

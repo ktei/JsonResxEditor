@@ -4,15 +4,15 @@
 winexe
 C#
 .cs
-C:\dev\vs\JsonResxEditor\Rui.JsonResxEditor\Rui.JsonResxEditor\obj\Debug\
+C:\dev\vs\JsonResxEditor\Rui.JsonResxEditor\Rui.JsonResxEditor\obj\Release\
 Rui.JsonResxEditor
 none
 false
-DEBUG;TRACE
+TRACE
 C:\dev\vs\JsonResxEditor\Rui.JsonResxEditor\Rui.JsonResxEditor\App.xaml
 7-1696519325
 1-1682558329
-56-1705942041
+56-815459526
 181457736505
 Views\AddLocaleView.xaml;Views\ItemView.xaml;Views\OpenProjectView.xaml;Views\ProjectView.xaml;Views\ShellView.xaml;Views\SourceView.xaml;Views\TranslationListView.xaml;
 

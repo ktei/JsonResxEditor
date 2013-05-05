@@ -1,5 +1,5 @@
 ﻿<Window x:Class="Rui.JsonResxEditor.Views.SourceView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" WindowStartupLocation="CenterOwner"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" WindowStartupLocation="CenterOwner" Icon="/Assets/app_icon.png"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" SizeToContent="Height" Width="350">
     <Window.BindingGroup>
         <BindingGroup/>

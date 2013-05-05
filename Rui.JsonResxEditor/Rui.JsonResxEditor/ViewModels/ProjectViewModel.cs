@@ -1,19 +1,17 @@
-﻿using Caliburn.Micro;
-using Rui.JsonResxEditor.Infrasructure;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rui.JsonResxEditor.Shared;
+﻿using Rui.JsonResxEditor.Infrasructure;
 using Rui.JsonResxEditor.Models;
+using Rui.JsonResxEditor.Shared;
+using System;
+using System.ComponentModel.Composition;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Rui.JsonResxEditor.ViewModels
 {
-    public class ProjectViewModel : Screen
+    public class ProjectViewModel : Caliburn.Micro.Screen
     {
         string _name;
+        string _workspace;
         string _description;
 
         public ProjectViewModel()
@@ -28,6 +26,7 @@ namespace Rui.JsonResxEditor.ViewModels
             DisplayName = "Project properties";
             Name = project.Name;
             Description = project.Description;
+            Workspace = project.Workspace;
             Id = project.Id;
         }
 
@@ -54,6 +53,19 @@ namespace Rui.JsonResxEditor.ViewModels
             }
         }
 
+        public string Workspace
+        {
+            get { return _workspace; }
+            set
+            {
+                if (_workspace != value)
+                {
+                    _workspace = value;
+                    NotifyOfPropertyChange(() => Workspace);
+                }
+            }
+        }
+
         public string Description
         {
             get { return _description; }
@@ -64,6 +76,16 @@ namespace Rui.JsonResxEditor.ViewModels
                     _description = value;
                     NotifyOfPropertyChange(() => Description);
                 }
+            }
+        }
+
+        public void ChooseWorkspace()
+        {
+            var dlg = new FolderBrowserDialog();
+            dlg.Description = "Select workspace";
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                Workspace = dlg.SelectedPath;
             }
         }
 
@@ -94,7 +116,8 @@ namespace Rui.JsonResxEditor.ViewModels
             {
                 Id = this.Id,
                 Name = this.Name,
-                Description = this.Description
+                Description = this.Description,
+                Workspace = this.Workspace
             };
         }
 
@@ -113,6 +136,16 @@ namespace Rui.JsonResxEditor.ViewModels
             if (string.IsNullOrWhiteSpace(Name))
             {
                 MessageBoxSupport.ShowError("Please provide a project name.");
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(Workspace))
+            {
+                MessageBoxSupport.ShowError("Please choose a workspace.");
+                return false;
+            }
+            if (!Directory.Exists(Workspace))
+            {
+                MessageBoxSupport.ShowError("The directory for workspace does not exist.");
                 return false;
             }
             return true;

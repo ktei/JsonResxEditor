@@ -15,5 +15,6 @@ namespace Rui.JsonResxEditor.Infrasructure
         bool HasProject();
         void Delete(int projectId);
         Project Get(int projectId);
+        void WriteToFile(string directory, int projectId);
     }
 }
