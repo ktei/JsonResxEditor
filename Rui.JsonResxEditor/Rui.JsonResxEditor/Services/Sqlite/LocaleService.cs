@@ -25,7 +25,7 @@ namespace Rui.JsonResxEditor.Services.Sqlite
         {
             using (var db = new SQLite.SQLiteConnection(Settings.DatabasePath))
             {
-                return db.Query<Locale>("select * from Locale where ProjectId = ?", projectId);
+                return db.Query<Locale>("select * from Locale where ProjectId = ? order by DisplayName", projectId);
             }
         }
 
